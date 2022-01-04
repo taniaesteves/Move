@@ -45,9 +45,7 @@ listaBolas copia (listaBolas bolas) {
     int i;
     
     for (i = 0; i < NBOLAS; i++) {
-        res[i].cor = bolas[i].cor;
-        res[i].posx = bolas[i].posx;
-        res[i].posy = bolas[i].posy;
+        res[i] = bolas[i];
     }
     
     return res;
@@ -299,13 +297,13 @@ void imprimeLinha (int i, int mat[3][3], listaBolas bolas){
                     else {
                         switch (corBola(x, y, bolas)) {
                             case 1:
-                                printf(KRED "●●●●" KNRM);
+                                printf(KRED "●●●●●" KNRM);
                               break;    
                             case 2:
-                                printf(KBLU "●●●●" KNRM);
+                                printf(KBLU "●●●●●" KNRM);
                               break;
                             case 3:
-                                printf(KGRN "●●●●" KNRM);
+                                printf(KGRN "●●●●●" KNRM);
                               break;
                         }
                     }
@@ -339,17 +337,6 @@ void imprimeLinha (int i, int mat[3][3], listaBolas bolas){
     
 }
 
-
-// Imprimir " - - - - - - - - - - - - "
-// ciclo i = 1
-    // Imprimir '|'
-    // if (i % 5 == 0)
-    //      printf " - - - - - - - - - - - - "
-    // else
-    //      imprimeLinha (i, mapa, pecas);
-    //
-    // Imprimir '\n'
-
 void imprime (int mat[3][3], listaBolas bolas){
     int i = 1;
     
@@ -357,9 +344,6 @@ void imprime (int mat[3][3], listaBolas bolas){
     
     for (i = 1; i <= 15; i++) {
         if (i % 5 != 0) {
-               // printf(" - - - - - - - - - - - - ");
-      //  else 
-            
             imprimeLinha (i, mat, bolas);
             printf ("\n");
     
@@ -464,7 +448,7 @@ int main(int argc, const char * argv[]) {
     
     imprime(mat, bolas);
     
-    //solver(12, mat, bolas);
+    solver(12, mat, bolas);
     
  //   printf("LER AO CONTRÁRIO\n");
     return 0;
