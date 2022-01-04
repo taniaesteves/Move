@@ -2,3 +2,4 @@ project(MoveSolver)
 cmake_minimum_required(VERSION 3.0)
 
 add_executable(moveS moveS.c)
+add_executable(moveS2 moveS2.c)
