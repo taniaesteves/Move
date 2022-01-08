@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="80dp"
+        android:paddingBottom="80dp"
+        android:shrinkColumns="*"
+        android:stretchColumns="*">
+
+
+    <androidx.constraintlayout.widget.Guideline android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                                android:id="@+id/guideline"
+                                                android:orientation="vertical"
+                                                app:layout_constraintGuide_percent="0.33"
+                                                app:layout_constraintStart_toStartOf="parent"
+                                                app:layout_constraintHorizontal_bias="0.33"
+                                                app:layout_constraintEnd_toEndOf="parent"/>
+    <androidx.constraintlayout.widget.Guideline android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                                android:id="@+id/guideline3" app:layout_constraintGuide_begin="20dp"
+                                                android:orientation="vertical"
+                                                app:layout_constraintGuide_percent="0.66"
+                                                app:layout_constraintStart_toStartOf="parent"
+                                                app:layout_constraintHorizontal_bias="0.66"
+                                                app:layout_constraintEnd_toEndOf="parent"/>
+    <androidx.constraintlayout.widget.Guideline android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                                android:id="@+id/guideline2"
+                                                android:orientation="horizontal"
+                                                app:layout_constraintGuide_percent="0.33"
+                                                app:layout_constraintStart_toStartOf="parent"
+                                                app:layout_constraintHorizontal_bias="0.33"
+                                                app:layout_constraintEnd_toEndOf="parent"
+                                                app:layout_constraintGuide_end="382dp"/>
+    <androidx.constraintlayout.widget.Guideline android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                                android:id="@+id/guideline4"
+                                                android:orientation="horizontal"
+                                                app:layout_constraintGuide_percent="0.66"
+                                                app:layout_constraintStart_toStartOf="parent"
+                                                app:layout_constraintHorizontal_bias="0.66"
+                                                app:layout_constraintEnd_toEndOf="parent"
+                                                app:layout_constraintGuide_begin="376dp"
+    />
+
+    <!-- 1x1 -->
+    <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/button1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/guideline2">
+
+        <ImageView
+                android:id="@+id/square1_1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:src="@drawable/box_black"
+        />
+
+    </RelativeLayout>
+
+
+    <!-- 1x2 -->
+    <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/button2"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintEnd_toStartOf="@+id/guideline3"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/guideline2">
+
+        <ImageView
+                android:id="@+id/square1_2"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:src="@drawable/box_black"
+        />
+
+        <ImageView
+                android:id="@+id/ball_green"
+                app:srcCompat="@drawable/circle_green"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dip"
+                android:layout_alignTop="@id/square1_2"
+                android:layout_alignBottom="@id/square1_2"
+                android:layout_alignLeft="@id/square1_2"
+                android:layout_alignRight="@id/square1_2"
+        />
+    </RelativeLayout>
+
+    <!-- 1x3 -->
+    <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/button3"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/guideline2">
+
+        <ImageView
+                android:id="@+id/square_1_3"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:src="@drawable/box_green"
+        />
+
+    </RelativeLayout>
+
+    <!-- 2x1 -->
+    <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/button4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="@+id/guideline2"
+            app:layout_constraintBottom_toTopOf="@+id/guideline4">
+
+        <ImageView
+                android:id="@+id/square2_1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:src="@drawable/box_black"
+        />
+
+        <ImageView
+                android:id="@+id/ball_blue"
+                app:srcCompat="@drawable/circle_blue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dip"
+                android:layout_alignTop="@id/square2_1"
+                android:layout_alignBottom="@id/square2_1"
+                android:layout_alignLeft="@id/square2_1"
+                android:layout_alignRight="@id/square2_1"
+        />
+    </RelativeLayout>
+
+    <!-- 2x2 -->
+    <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/button5"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintEnd_toStartOf="@+id/guideline3"
+            app:layout_constraintTop_toTopOf="@+id/guideline2"
+            app:layout_constraintBottom_toTopOf="@+id/guideline4">
+
+        <ImageView
+                android:id="@+id/square_2_2"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:src="@drawable/box_blue"
+                android:layout_alignParentTop="true"
+        />
+
+    </RelativeLayout>
+
+    <!-- 2x3 -->
+    <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/button6"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline2"
+            app:layout_constraintBottom_toTopOf="@+id/guideline4">
+
+        <ImageView
+                android:id="@+id/square2_3"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:src="@drawable/box_white"
+        />
+
+    </RelativeLayout>
+
+    <!-- 3x1 -->
+    <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/button7"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/guideline4"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+                android:id="@+id/square3_1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:src="@drawable/box_black"
+        />
+
+    </RelativeLayout>
+
+    <!-- 3x2 -->
+    <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/button8"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintEnd_toStartOf="@+id/guideline3"
+            app:layout_constraintTop_toTopOf="@+id/guideline4"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+                android:id="@+id/square3_2"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:src="@drawable/box_black"
+        />
+
+        <ImageView
+                android:id="@+id/ball_red"
+                app:srcCompat="@drawable/circle_red"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dip"
+                android:layout_alignTop="@id/square3_2"
+                android:layout_alignBottom="@id/square3_2"
+                android:layout_alignLeft="@id/square3_2"
+                android:layout_alignRight="@id/square3_2"
+        />
+    </RelativeLayout>
+
+    <!-- 3x3 -->
+    <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/button9"
+            app:layout_constraintStart_toStartOf="@+id/guideline3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline4"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+                android:id="@+id/square_3_3"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:src="@drawable/box_red" />
+
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
