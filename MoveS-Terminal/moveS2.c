@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <glib.h>
 
 #define KNRM  "\x1B[0m"
 #define KRED  "\x1B[31m"
@@ -22,6 +23,10 @@ typedef enum field {
     BLUE_RECEPTER = 10
 } Field;
 
+typedef enum step {
+    Up, Down, Left, Right
+} Step;
+
 typedef enum ball {
     NONE = 0,
     RED = 8, 
@@ -39,6 +44,13 @@ typedef struct map {
     int width;
     int height;
 } Map;
+
+typedef struct playback {
+    Map initialState;
+    Map currentState;
+    Step steps[20];
+    int stepCount;
+} Playback;
 
 void printPiece(Piece p, int x, int y) {
     switch (p.field) {
@@ -108,6 +120,56 @@ int isSolved(Map map) {
     return 1;
 }
 
+void tryMoveBall(Map *map, int x1, int y1, int x2, int y2) {
+    Piece *p_src = &(map -> pieces[y1 * map -> width + x1]);
+    Piece *p_dest = &(map -> pieces[y2 * map -> width + x2]);
+
+    if (p_src -> ball != NONE && (p_dest -> ball == NONE && p_dest -> field != BLOCK)) {
+        p_dest -> ball = p_src -> ball;
+        p_src -> ball = NONE;
+    }
+}
+
+Map up(Map map){
+    for(int r = 1; r < map.height; r++) {
+        for(int c = 0; c < map.width; c++) {
+            tryMoveBall(&map, c, r, c, r - 1);
+        }
+    }
+    return map;
+}
+
+Map down(Map map){
+    for(int r = map.height - 2; r >= 0; r--) {
+        for(int c = 0; c < map.width; c++) {
+            tryMoveBall(&map, c, r, c, r + 1);
+        }
+    }
+    return map;
+}
+
+Map right(Map map){
+    for(int r = 0; r < map.height; r++) {
+        for(int c = map.width - 2; c >= 0; c--) {
+            tryMoveBall(&map, c, r, c + 1, r);
+        }
+    }
+    return map;
+}
+
+Map left(Map map){
+    for(int r = 0; r < map.height; r++) {
+        for(int c = 1; c < map.width; c++) {
+            tryMoveBall(&map, c, r, c - 1, r);
+        }
+    }
+    return map;
+}
+
+void solve(Map map) {
+
+}
+
 int main(void) {
     // Map map3x3 = {{{BLOCK, NONE},       {EMPTY, NONE}, {GREEN_RECEPTER, GREEN},
     //                {RED_RECEPTER, RED}, {EMPTY, NONE}, {EMPTY, NONE},
@@ -120,6 +182,10 @@ int main(void) {
                           {EMPTY, NONE}, {BLOCK, NONE},          {EMPTY, BLUE}}, 3, 3};
     printMap(map3x3ToSolve);
     printf("Is solved %d\n", isSolved(map3x3ToSolve));
+    // printMap(up(map3x3ToSolve));
+    // printMap(down(map3x3ToSolve));
+    // printMap(left(map3x3ToSolve));
+    printMap(down(down(left(up(map3x3ToSolve)))));
 
     // Map map4x4 = {{{BLOCK, NONE},        {EMPTY, NONE}, {GREEN_RECEPTER, BLUE}, {GREEN_RECEPTER, BLUE},
     //                {RED_RECEPTER, NONE}, {EMPTY, RED},  {EMPTY, NONE},          {EMPTY, NONE},
