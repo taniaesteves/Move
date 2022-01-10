@@ -52,10 +52,12 @@ void printChar(Piece p, int x, int y) {
         default: break;
     }
 
-    x -= 2;
-    y -= 5;
+    float fx = x/2.2f - 3.0f;
+    float fy = y - 3.0f;
+
+   
     if(p & 448) {
-        if(x * x + y * y < 8) {
+        if(fx * fx + fy * fy < 11) {
             printf("●");
         } else {
             printf(" ");
@@ -69,10 +71,10 @@ void printChar(Piece p, int x, int y) {
 
 void print(Piece map[3][3], int height, int width) {
     for(int r = 0; r < height; r++) {
-        for(int subRow = 0; subRow < 5; subRow++) {
+        for(int subRow = 0; subRow < 7; subRow++) {
             for(int c = 0; c < width; c++) {
-                for(int subColumn = 0; subColumn < 10; subColumn++) {
-                    printChar(map[r][c], subRow, subColumn);
+                for(int subColumn = 0; subColumn < 14; subColumn++) {
+                    printChar(map[r][c], subColumn, subRow);
                 }
             }
             putchar('\n');
@@ -86,7 +88,7 @@ int main(void) {
     Piece map[3][3] = {
         {BLOCK,          EMPTY,                 GREEN_RECEPTER | BLUE_BALL},
         {RED_RECEPTER,   EMPTY | RED_BALL,      EMPTY},
-        {EMPTY,          EMPTY,                 BLUE_RECEPTER}
+        {EMPTY,          EMPTY,                 BLUE_RECEPTER | BLUE_BALL}
     };
 
     print(map, 3, 3);
