@@ -15,18 +15,18 @@
 #define BGRN "\e[102m"
 
 typedef enum field {
-    EMPTY, 
-    BLOCK, 
-    RED_RECEPTER, 
-    GREEN_RECEPTER,
-    BLUE_RECEPTER
+    EMPTY = 0,
+    BLOCK = 1, 
+    RED_RECEPTER = 8,
+    GREEN_RECEPTER = 9,
+    BLUE_RECEPTER = 10
 } Field;
 
 typedef enum ball {
-    NONE, 
-    RED, 
-    GREEN,
-    BLUE
+    NONE = 0,
+    RED = 8, 
+    GREEN = 9,
+    BLUE = 10
 } Ball;
 
 typedef struct piece {
@@ -96,18 +96,39 @@ void printMap(Map map) {
     }
 }
 
+int isSolved(Map map) {
+    for(int r = 0; r < map.height; r++) {
+        for(int c = 0; c < map.width; c++) {
+            Piece p = map.pieces[r * map.width + c];
+            if (p.ball != NONE && p.ball != p.field) {
+                return 0;
+            }
+        }
+    }
+    return 1;
+}
+
 int main(void) {
-    Map map3x3 = {{{BLOCK, NONE},       {EMPTY, NONE}, {GREEN_RECEPTER, BLUE},
-                  {RED_RECEPTER, NONE}, {EMPTY, RED},  {EMPTY, NONE},
-                  {EMPTY, NONE},        {EMPTY, NONE}, {BLUE_RECEPTER, BLUE}}, 3, 3};
-    printMap(map3x3);
+    // Map map3x3 = {{{BLOCK, NONE},       {EMPTY, NONE}, {GREEN_RECEPTER, GREEN},
+    //                {RED_RECEPTER, RED}, {EMPTY, NONE}, {EMPTY, NONE},
+    //                {EMPTY, NONE},       {EMPTY, NONE}, {BLUE_RECEPTER, BLUE}}, 3, 3};
+    // printMap(map3x3);
+    // printf("Is solved %d\n", isSolved(map3x3));
 
-    Map map4x4 = {{{BLOCK, NONE},        {EMPTY, NONE}, {GREEN_RECEPTER, BLUE}, {GREEN_RECEPTER, BLUE},
-                   {RED_RECEPTER, NONE}, {EMPTY, RED},  {EMPTY, NONE},          {EMPTY, NONE},
-                   {RED_RECEPTER, NONE}, {EMPTY, RED},  {EMPTY, NONE},          {EMPTY, NONE},
-                   {EMPTY, NONE},        {EMPTY, NONE}, {BLUE_RECEPTER, BLUE},  {BLUE_RECEPTER, BLUE}}, 4, 4};
+    Map map3x3ToSolve = {{{EMPTY, NONE}, {GREEN_RECEPTER, NONE}, {BLOCK, NONE},
+                          {EMPTY, NONE}, {RED_RECEPTER, GREEN},  {BLUE_RECEPTER, RED},
+                          {EMPTY, NONE}, {BLOCK, NONE},          {EMPTY, BLUE}}, 3, 3};
+    printMap(map3x3ToSolve);
+    printf("Is solved %d\n", isSolved(map3x3ToSolve));
 
-    printMap(map4x4);
+    // Map map4x4 = {{{BLOCK, NONE},        {EMPTY, NONE}, {GREEN_RECEPTER, BLUE}, {GREEN_RECEPTER, BLUE},
+    //                {RED_RECEPTER, NONE}, {EMPTY, RED},  {EMPTY, NONE},          {EMPTY, NONE},
+    //                {RED_RECEPTER, NONE}, {EMPTY, RED},  {EMPTY, NONE},          {EMPTY, NONE},
+    //                {EMPTY, NONE},        {EMPTY, NONE}, {BLUE_RECEPTER, BLUE},  {BLUE_RECEPTER, BLUE}}, 4, 4};
+
+    // printMap(map4x4);
+    // printf("Is solved %d\n", isSolved(map4x4));
+
 
 }
 
