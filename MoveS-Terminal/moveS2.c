@@ -14,21 +14,34 @@
 #define BBLU "\e[104m"
 #define BGRN "\e[102m"
 
-typedef enum piece {
-    EMPTY = 0,
-    BLOCK = 1,
-    RED_RECEPTER = 2,
-    GREEN_RECEPTER = 3,
-    BLUE_RECEPTER = 4,
+typedef enum field {
+    EMPTY, 
+    BLOCK, 
+    RED_RECEPTER, 
+    GREEN_RECEPTER,
+    BLUE_RECEPTER
+} Field;
 
-    RED_BALL = 64,
-    GREEN_BALL = 128,
-    BLUE_BALL = 192,
+typedef enum ball {
+    NONE, 
+    RED, 
+    GREEN,
+    BLUE
+} Ball;
 
+typedef struct piece {
+    Field field;
+    Ball ball;
 } Piece;
 
-void printChar(Piece p, int x, int y) {
-    switch (p & 63) {
+typedef struct map {
+    Piece pieces[25];
+    int width;
+    int height;
+} Map;
+
+void printPiece(Piece p, int x, int y) {
+    switch (p.field) {
         case EMPTY:
             break;
         case BLOCK:
@@ -42,12 +55,12 @@ void printChar(Piece p, int x, int y) {
         default: break;
     }
 
-    switch (p & 448) {
-        case RED_BALL:
+    switch (p.ball) {
+        case RED:
             printf(KRED); break;
-        case GREEN_BALL:
+        case GREEN:
             printf(KGRN); break;
-        case BLUE_BALL:
+        case BLUE:
             printf(KBLU); break;
         default: break;
     }
@@ -55,8 +68,7 @@ void printChar(Piece p, int x, int y) {
     float fx = x/2.2f - 3.0f;
     float fy = y - 3.0f;
 
-   
-    if(p & 448) {
+    if(p.ball != NONE) {
         if(fx * fx + fy * fy < 11) {
             printf("●");
         } else {
@@ -69,29 +81,33 @@ void printChar(Piece p, int x, int y) {
     printf(KNRM);
 }
 
-void print(Piece map[3][3], int height, int width) {
-    for(int r = 0; r < height; r++) {
+void printMap(Map map) {
+    for(int r = 0; r < map.height; r++) {
         for(int subRow = 0; subRow < 7; subRow++) {
-            for(int c = 0; c < width; c++) {
+            putchar('|');
+            for(int c = 0; c < map.width; c++) {
                 for(int subColumn = 0; subColumn < 14; subColumn++) {
-                    printChar(map[r][c], subColumn, subRow);
+                    printPiece(map.pieces[r * map.width + c], subColumn, subRow);
                 }
             }
+            putchar('|');
             putchar('\n');
         }
     }
 }
 
-
-
 int main(void) {
-    Piece map[3][3] = {
-        {BLOCK,          EMPTY,                 GREEN_RECEPTER | BLUE_BALL},
-        {RED_RECEPTER,   EMPTY | RED_BALL,      EMPTY},
-        {EMPTY,          EMPTY,                 BLUE_RECEPTER | BLUE_BALL}
-    };
+    Map map3x3 = {{{BLOCK, NONE},       {EMPTY, NONE}, {GREEN_RECEPTER, BLUE},
+                  {RED_RECEPTER, NONE}, {EMPTY, RED},  {EMPTY, NONE},
+                  {EMPTY, NONE},        {EMPTY, NONE}, {BLUE_RECEPTER, BLUE}}, 3, 3};
+    printMap(map3x3);
 
-    print(map, 3, 3);
+    Map map4x4 = {{{BLOCK, NONE},        {EMPTY, NONE}, {GREEN_RECEPTER, BLUE}, {GREEN_RECEPTER, BLUE},
+                   {RED_RECEPTER, NONE}, {EMPTY, RED},  {EMPTY, NONE},          {EMPTY, NONE},
+                   {RED_RECEPTER, NONE}, {EMPTY, RED},  {EMPTY, NONE},          {EMPTY, NONE},
+                   {EMPTY, NONE},        {EMPTY, NONE}, {BLUE_RECEPTER, BLUE},  {BLUE_RECEPTER, BLUE}}, 4, 4};
+
+    printMap(map4x4);
 
 }
 
