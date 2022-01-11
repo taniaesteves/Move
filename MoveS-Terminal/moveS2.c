@@ -220,6 +220,8 @@ Solution solve(Map map) {
     }
 
     Solution *p = g_queue_pop_head(q);
+    g_queue_clear_full(q, free);
+    
     if(!isSolved(p -> currentState)) {
         return (Solution){}; // Return empty solution
     } else {
