@@ -187,7 +187,7 @@ Solution *newSolution(Map initialState) {
 }
 
 void printSolution(Solution s){
-    if(s.stepCount == 0) {
+    if(s.stepCount <= 0) {
         printf("Not solved...\n");
         return;
     }
@@ -221,12 +221,47 @@ Solution solve(Map map) {
 
     Solution *p = g_queue_pop_head(q);
     g_queue_clear_full(q, free);
-    
-    if(!isSolved(p -> currentState)) {
-        return (Solution){}; // Return empty solution
-    } else {
+
+    if(isSolved(p -> currentState)) {
         return *p;
     }
+    return (Solution){};
+
+}
+
+int mapEquals(Map *m1, Map *m2) {
+    return !memcmp(m1 -> pieces, m2 -> pieces, m1 -> height * m1 -> width * sizeof(Piece));
+}
+
+Solution solve2(Map map, int depth) {
+    Solution s = {};
+    if(isSolved(map)){
+        s.currentState = map;
+        return s;
+    } else if (depth == 0) {
+        s.stepCount = -1;
+        return s;
+    }
+
+    Map (*tranformations[4]) (Map map) = {up, down, left, right};
+    Step tranformationsEnums[] = {Up, Down, Left, Right};
+
+    s.stepCount = -1;
+    for(int i = 0; i < 4; i++) {
+        Map tranformedMad = tranformations[i](map);
+        if (mapEquals(&tranformedMad, &map)) {
+            continue;
+        }
+        Solution sTemp = solve2(tranformations[i](map), depth - 1);
+        if (sTemp.stepCount != -1) {
+            if (s.stepCount == -1 || sTemp.stepCount < s.stepCount) {
+                s = sTemp;
+                s.steps[s.stepCount++] = tranformationsEnums[i];
+            }
+        }
+    }
+
+    return s;
 
 }
 
@@ -241,7 +276,7 @@ int main(void) {
                           {EMPTY, NONE}, {RED_RECEPTER, GREEN},  {BLUE_RECEPTER, RED},
                           {EMPTY, NONE}, {BLOCK, NONE},          {EMPTY, BLUE}}, 3, 3};
     printMap(map3x3ToSolve);
-    printSolution(solve(map3x3ToSolve));
+    printSolution(solve2(map3x3ToSolve, 15));
 
     // Map map4x4 = {{{BLOCK, NONE},        {EMPTY, NONE}, {GREEN_RECEPTER, BLUE}, {GREEN_RECEPTER, BLUE},
     //                {RED_RECEPTER, NONE}, {EMPTY, RED},  {EMPTY, NONE},          {EMPTY, NONE},
