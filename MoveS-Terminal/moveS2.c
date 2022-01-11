@@ -166,7 +166,59 @@ Map left(Map map){
     return map;
 }
 
+Playback *newPlaybackNextStep(Playback p, Step nextStep, Map newState){
+    Playback *newPlayback = malloc(sizeof(Playback));
+    memcpy(newPlayback, &p, sizeof(Playback));
+
+    newPlayback -> steps[(newPlayback -> stepCount)++] = nextStep;
+    newPlayback -> currentState = newState;
+
+    return newPlayback;
+}
+
+Playback *newPlayback(Map initialState) {
+    Playback *newPlayback = malloc(sizeof(Playback));
+
+    newPlayback -> initialState = initialState;
+    newPlayback -> currentState = initialState;
+    newPlayback -> stepCount = 0;
+
+    return newPlayback;
+}
+
+void printSolution(Step *steps, int size){
+    for(int i = 0; i < size; i++) {
+        switch (steps[i]) {
+            case Up: printf("Up\n"); break;
+            case Down: printf("Down\n"); break;
+            case Left: printf("Left\n"); break;
+            case Right: printf("Right\n"); break;
+            default: break;
+        }
+    }
+}
+
 void solve(Map map) {
+    GQueue* q = g_queue_new();
+    g_queue_push_tail(q, newPlayback(map));
+
+    while(!isSolved(((Playback*)g_queue_peek_head(q)) -> currentState)
+            && g_queue_get_length(q) < 1000000) {
+
+        Playback *p = g_queue_pop_head(q);
+        g_queue_push_tail(q, newPlaybackNextStep(*p, Up, up(p -> currentState)));
+        g_queue_push_tail(q, newPlaybackNextStep(*p, Down, down(p -> currentState)));
+        g_queue_push_tail(q, newPlaybackNextStep(*p, Left, left(p -> currentState)));
+        g_queue_push_tail(q, newPlaybackNextStep(*p, Right, right(p -> currentState)));
+    }
+
+    if(g_queue_get_length(q) >= 1000000) {
+        printf("Not solved\n");
+    } else {
+        Playback *p = g_queue_peek_head(q);
+        printf("Solved:\n");
+        printSolution(p -> steps, p -> stepCount);
+    }
 
 }
 
@@ -181,11 +233,12 @@ int main(void) {
                           {EMPTY, NONE}, {RED_RECEPTER, GREEN},  {BLUE_RECEPTER, RED},
                           {EMPTY, NONE}, {BLOCK, NONE},          {EMPTY, BLUE}}, 3, 3};
     printMap(map3x3ToSolve);
-    printf("Is solved %d\n", isSolved(map3x3ToSolve));
+    // printf("Is solved %d\n", isSolved(up(left(left(up(up(map3x3ToSolve)))))));
+    solve(map3x3ToSolve);
     // printMap(up(map3x3ToSolve));
     // printMap(down(map3x3ToSolve));
     // printMap(left(map3x3ToSolve));
-    printMap(down(down(left(up(map3x3ToSolve)))));
+    // printMap(down(down(left(up(map3x3ToSolve)))));
 
     // Map map4x4 = {{{BLOCK, NONE},        {EMPTY, NONE}, {GREEN_RECEPTER, BLUE}, {GREEN_RECEPTER, BLUE},
     //                {RED_RECEPTER, NONE}, {EMPTY, RED},  {EMPTY, NONE},          {EMPTY, NONE},

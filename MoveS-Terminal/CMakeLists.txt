@@ -8,4 +8,4 @@ add_executable(moveS moveS.c)
 
 add_executable(moveS2 moveS2.c)
 target_include_directories(moveS2 PRIVATE ${GLIB_INCLUDE_DIRS})
-target_link_libraries(moveS2 INTERFACE ${GLIB_LDFLAGS})
+target_link_libraries(moveS2 PUBLIC ${GLIB_LDFLAGS})
