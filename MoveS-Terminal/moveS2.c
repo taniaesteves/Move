@@ -1,5 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <glib.h>
+#include <sys/random.h>
 
 #define KNRM  "\x1B[0m"
 #define KRED  "\x1B[31m"
@@ -94,6 +96,12 @@ void printPiece(Piece p, int x, int y) {
 }
 
 void printMap(Map map) {
+    for(int i = 0; i < map.width * 14 +  2; ++i) {
+
+        putchar('_');
+    }
+    putchar('\n');
+
     for(int r = 0; r < map.height; r++) {
         for(int subRow = 0; subRow < 7; subRow++) {
             putchar('|');
@@ -106,6 +114,11 @@ void printMap(Map map) {
             putchar('\n');
         }
     }
+
+    for(int i = 0; i < map.width * 14 + 2; ++i) {
+        putchar('_');
+    }
+    putchar('\n');
 }
 
 int isSolved(Map map) {
@@ -265,6 +278,41 @@ Solution solve2(Map map, int depth) {
 
 }
 
+Map generateRandomMap() {
+    Map map = {};
+    map.height = 3;
+    map.width = 3;
+    int T = map.height * map.width;
+
+    unsigned int seed;
+    if (sizeof(unsigned int) != getrandom(&seed, sizeof(unsigned int), 0)) {
+        printf("RANDOM DATA PROBLEM\n");
+    }
+
+    int r = abs(rand_r(&seed));
+    int nBlocks = r % 4;
+    // Distribute blocks
+    for(int i = 0; i < nBlocks; ++i) {
+        r = abs(rand_r(&seed));
+        map.pieces[r % T].field = BLOCK;
+    }
+
+    // Distribute blocks
+    for(int i = 0; i < 3; ++i) {
+        do {
+            r = abs(rand_r(&seed));
+        } while(map.pieces[r % T].field != EMPTY);
+        map.pieces[r % T].field = RED_RECEPTER + i;
+
+        do {
+            r = abs(rand_r(&seed));
+        } while(map.pieces[r % T].field == BLOCK || map.pieces[r % T].ball != NONE);
+        map.pieces[r % T].ball = RED + i;
+    }
+
+    return map;
+}
+
 int main(void) {
     // Map map3x3 = {{{BLOCK, NONE},       {EMPTY, NONE}, {GREEN_RECEPTER, GREEN},
     //                {RED_RECEPTER, RED}, {EMPTY, NONE}, {EMPTY, NONE},
@@ -272,11 +320,21 @@ int main(void) {
     // printMap(map3x3);
     // printf("Is solved %d\n", isSolved(map3x3));
 
-    Map map3x3ToSolve = {{{EMPTY, NONE}, {GREEN_RECEPTER, NONE}, {BLOCK, NONE},
-                          {EMPTY, NONE}, {RED_RECEPTER, GREEN},  {BLUE_RECEPTER, RED},
-                          {EMPTY, NONE}, {BLOCK, NONE},          {EMPTY, BLUE}}, 3, 3};
-    printMap(map3x3ToSolve);
-    printSolution(solve2(map3x3ToSolve, 15));
+    // Map map3x3ToSolve = {{{EMPTY, NONE},         {GREEN_RECEPTER, NONE}, {BLOCK, NONE},
+    //                       {BLUE_RECEPTER, NONE}, {BLOCK, NONE},          {EMPTY, RED},
+    //                       {RED_RECEPTER, NONE},  {EMPTY, GREEN},         {EMPTY, BLUE}}, 3, 3};
+    // printMap(map3x3ToSolve);
+    // printSolution(solve2(map3x3ToSolve, 11));
+
+    for(int i = 0; i < 100; ++i){
+        Map m = generateRandomMap();
+        Solution s = solve2(m, 11);
+        if (s.stepCount > 10) {
+            printMap(m);
+            printSolution(s);
+            puts("_____________________________________________________________");
+        }
+    }
 
     // Map map4x4 = {{{BLOCK, NONE},        {EMPTY, NONE}, {GREEN_RECEPTER, BLUE}, {GREEN_RECEPTER, BLUE},
     //                {RED_RECEPTER, NONE}, {EMPTY, RED},  {EMPTY, NONE},          {EMPTY, NONE},
