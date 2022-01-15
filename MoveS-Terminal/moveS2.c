@@ -3,6 +3,12 @@
 #include <glib.h>
 #include <sys/random.h>
 
+#ifdef HAVE_GETRANDOM
+     #include <sys/random.h>
+#elif defined(HAVE_GETRANDOM_SYSCALL)
+    #include <sys/syscall.h>
+#endif
+
 #define KNRM  "\x1B[0m"
 #define KRED  "\x1B[31m"
 #define KGRN  "\x1B[32m"
@@ -19,7 +25,7 @@
 
 typedef enum field {
     EMPTY = 0,
-    BLOCK = 1, 
+    BLOCK = 1,
     RED_RECEPTER = 8,
     GREEN_RECEPTER = 9,
     BLUE_RECEPTER = 10
@@ -31,7 +37,7 @@ typedef enum step {
 
 typedef enum ball {
     NONE = 0,
-    RED = 8, 
+    RED = 8,
     GREEN = 9,
     BLUE = 10
 } Ball;
@@ -224,7 +230,7 @@ Solution solve(Map map) {
 
     while(!isSolved(((Solution*)g_queue_peek_head(q)) -> currentState)
             && g_queue_get_length(q) < 1000000) {
-            
+
         Solution *p = g_queue_pop_head(q);
         g_queue_push_tail(q, newSolutionNextStep(*p, Up, up(p -> currentState)));
         g_queue_push_tail(q, newSolutionNextStep(*p, Down, down(p -> currentState)));
@@ -285,7 +291,16 @@ Map generateRandomMap() {
     int T = map.height * map.width;
 
     unsigned int seed;
-    if (sizeof(unsigned int) != getrandom(&seed, sizeof(unsigned int), 0)) {
+    ssize_t res_random;
+
+    #ifdef HAVE_GETRANDOM
+        res_random = getrandom(&seed, sizeof(unsigned int), 0);
+    #elif defined(HAVE_GETRANDOM_SYSCALL)
+        res_random = getentropy(&seed, sizeof(unsigned int));
+    #endif
+
+    if (sizeof(unsigned int) != res_random)
+    {
         printf("RANDOM DATA PROBLEM\n");
     }
 
